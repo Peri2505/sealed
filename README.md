@@ -52,7 +52,7 @@ Open http://localhost:3000.
 
 | Variable | Where to get it |
 |---|---|
-| `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `NEXT_PUBLIC_PAYPAL_CLIENT_ID` | [PayPal Developer Dashboard](https://developer.paypal.com/dashboard/applications/sandbox) → Apps & Credentials → Sandbox → Create App |
+| `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` | [PayPal Developer Dashboard](https://developer.paypal.com/dashboard/applications/sandbox) → Apps & Credentials → Sandbox → Create App |
 | `ANTHROPIC_API_KEY` | [Claude Console](https://console.anthropic.com/) |
 | `PAYPAL_WEBHOOK_ID` (optional) | Dashboard → your app → Add Webhook → URL `https://<your-app>/api/webhooks/paypal`, events: `PAYMENT.AUTHORIZATION.*`, `PAYMENT.CAPTURE.*` |
 | `PAYPAL_PAYOUTS_ENABLED` (optional) | Set to `true` to forward the seller's share to their PayPal email with the Payouts API |

@@ -17,8 +17,6 @@ services:
         sync: false
       - key: PAYPAL_CLIENT_SECRET
         sync: false
-      - key: NEXT_PUBLIC_PAYPAL_CLIENT_ID
-        sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: APP_URL

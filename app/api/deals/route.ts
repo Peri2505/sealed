@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }>(req);
     const role: Role = b.creatorRole === "seller" ? "seller" : "buyer";
     const deal = await createDeal({ ...b, terms: b.terms ?? {}, risk: b.risk ?? null, creatorRole: role });
-    const base = process.env.APP_URL || new URL(req.url).origin;
+    const base = publicOrigin(req);
     return json(
       {
         deal: toPublic(deal, role),
@@ -29,4 +29,12 @@ export async function POST(req: Request) {
   } catch (e) {
     return fail(e);
   }
+}
+
+/** The address people use to reach the app. Behind a proxy (Render), req.url is the internal address. */
+function publicOrigin(req: Request) {
+  if (process.env.APP_URL) return process.env.APP_URL.replace(/\/$/, "");
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  const proto = req.headers.get("x-forwarded-proto")?.split(",")[0] || "https";
+  return host ? `${proto}://${host}` : new URL(req.url).origin;
 }

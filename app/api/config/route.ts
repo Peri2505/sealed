@@ -6,7 +6,8 @@ export const dynamic = "force-dynamic";
 
 export function GET() {
   return json({
-    paypalClientId: paypalConfigured ? process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || process.env.PAYPAL_CLIENT_ID : null,
+    // Always the client ID paired with the server's secret, so browser and server use the same PayPal app.
+    paypalClientId: paypalConfigured ? process.env.PAYPAL_CLIENT_ID : null,
     paypalSimulated: !paypalConfigured,
     aiSimulated: !aiConfigured,
     payoutsEnabled,
