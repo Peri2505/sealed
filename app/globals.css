@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f3f5fa;
-  --color-card: #ffffff;
-  --color-ink: #18203a;
-  --color-slate: #5d6683;
-  --color-line: #d9deea;
+  --color-paper: #eceef2;
+  --color-card: #fbfbfd;
+  --color-ink: #1a1f36;
+  --color-slate: #5b6280;
+  --color-line: #d6d9e3;
+  --color-wax: #6e1f3a;
+  --color-wax-soft: #f5e9ee;
   --color-hold: #d98e1f;
   --color-hold-soft: #fdf3e2;
   --color-safe: #1f7f58;
@@ -29,7 +31,9 @@ html {
 
 body {
   min-height: 100dvh;
-  background: var(--color-paper);
+  /* Laid paper: faint horizontal chain lines, like good stationery */
+  background-color: var(--color-paper);
+  background-image: repeating-linear-gradient(0deg, rgba(26, 31, 54, 0.028) 0 1px, transparent 1px 7px);
 }
 
 :focus-visible {
@@ -44,61 +48,66 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* The ticket: a deal printed on a perforated stub */
-.ticket {
+/* The letter: the deal, written on a folded sheet */
+.letter {
   position: relative;
-  background: var(--color-card);
+  background-color: var(--color-card);
+  background-image: repeating-linear-gradient(0deg, rgba(26, 31, 54, 0.022) 0 1px, transparent 1px 7px);
   border: 1px solid var(--color-line);
-  border-radius: 18px;
+  border-radius: 6px 6px 14px 14px;
+  box-shadow:
+    0 1px 0 rgba(26, 31, 54, 0.04),
+    0 22px 40px -28px rgba(26, 31, 54, 0.45);
 }
-.ticket-perf {
-  position: relative;
-  border-top: 2px dashed var(--color-line);
-}
-.ticket-perf::before,
-.ticket-perf::after {
-  content: "";
-  position: absolute;
-  top: -12px;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-line);
-}
-.ticket-perf::before {
-  left: -12px;
-  clip-path: inset(0 0 0 50%);
-}
-.ticket-perf::after {
-  right: -12px;
-  clip-path: inset(0 50% 0 0);
+/* The fold crease across the letter */
+.letter-fold {
+  height: 14px;
+  background: linear-gradient(180deg, rgba(26, 31, 54, 0) 0, rgba(26, 31, 54, 0.07) 48%, rgba(255, 255, 255, 0.9) 52%, rgba(26, 31, 54, 0) 100%);
 }
 
-/* The seal: the one animated moment, played when money changes state */
-@keyframes stamp {
+/* The wax seal: the one orchestrated motion */
+.wax {
+  overflow: visible;
+  filter: drop-shadow(0 7px 7px rgba(46, 10, 26, 0.32)) drop-shadow(0 1px 1px rgba(46, 10, 26, 0.4));
+}
+.wax-empty {
+  filter: none;
+}
+@keyframes wax-press {
   0% {
-    transform: scale(1.9) rotate(-28deg);
-    opacity: 0;
+    transform: translateY(-46px) scale(1.35) rotate(-14deg);
   }
-  55% {
-    transform: scale(0.92) rotate(-9deg);
-    opacity: 1;
+  62% {
+    transform: translateY(0) scale(0.9, 0.86) rotate(0deg);
   }
-  75% {
-    transform: scale(1.04) rotate(-11deg);
+  80% {
+    transform: scale(1.04, 1.03);
   }
   100% {
-    transform: scale(1) rotate(-10deg);
+    transform: none;
   }
 }
-.seal {
-  transform: rotate(-10deg);
+.wax-press {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  animation: wax-press 720ms cubic-bezier(0.22, 0.9, 0.3, 1) backwards;
 }
-.seal-animate {
-  animation: stamp 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+.wax-half {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  transition: transform 760ms cubic-bezier(0.2, 0.85, 0.25, 1.15);
 }
-
+@keyframes crack-in {
+  from {
+    stroke-dasharray: 0 240;
+  }
+  to {
+    stroke-dasharray: 240 0;
+  }
+}
+.wax-crack {
+  animation: crack-in 320ms ease-out both;
+}
 @keyframes flag-in {
   from {
     background-color: transparent;
@@ -118,8 +127,12 @@ mark.flag.medium {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .seal-animate,
+  .wax-press,
+  .wax-crack,
   mark.flag {
     animation: none;
+  }
+  .wax-half {
+    transition: none;
   }
 }

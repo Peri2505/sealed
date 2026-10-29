@@ -8,6 +8,7 @@ import type { DealTerms, PublicDeal, RiskReport, Role } from "@/lib/types";
 import { FlagList, MarkedChat, RiskMeter } from "@/components/RiskReport";
 import { Ticket, TermsEditor } from "@/components/Ticket";
 import { Button, DemoBadge, ErrorNote, Field, Input, TextArea } from "@/components/ui";
+import { WaxSeal } from "@/components/WaxSeal";
 
 type Analysis = { risk: RiskReport; terms: DealTerms; buyerName: string | null; sellerName: string | null };
 type Config = { aiSimulated: boolean; paypalSimulated: boolean; payoutsEnabled: boolean };
@@ -93,8 +94,11 @@ export default function Home() {
           )}
         </div>
 
-        <div className="rounded-[22px] border border-line bg-card p-5 shadow-[0_1px_0_#d9deea,0_18px_40px_-24px_rgba(24,32,58,.35)] sm:p-6">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div className="letter relative p-5 sm:p-6">
+          <div className="pointer-events-none absolute -right-5 -top-14 hidden sm:block lg:-right-10">
+            <WaxSeal state="pressed" size={128} label="Sealed" />
+          </div>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:pr-24">
             <label htmlFor="chat" className="font-semibold">
               Your conversation
             </label>
@@ -169,7 +173,7 @@ export default function Home() {
             </div>
 
             {editing ? (
-              <div className="rounded-2xl border border-line bg-card p-5">
+              <div className="letter p-5">
                 <TermsEditor value={terms} onChange={setTerms} />
                 <div className="mt-4 flex justify-end">
                   <Button variant="quiet" onClick={() => setEditing(false)}>

@@ -4,47 +4,21 @@ import { useState } from "react";
 import { money } from "@/lib/client";
 import type { DealStatus, DealTerms } from "@/lib/types";
 import { Button, Field, Input, TextArea } from "./ui";
+import { WaxSeal, type SealState } from "./WaxSeal";
 
-const SEAL: Record<DealStatus, { word: string; sub: string; color: string }> = {
-  draft: { word: "Draft", sub: "not agreed", color: "#5d6683" },
-  agreed: { word: "Agreed", sub: "awaiting payment", color: "#18203a" },
-  funded: { word: "On hold", sub: "money is safe", color: "#d98e1f" },
-  disputed: { word: "In review", sub: "money still held", color: "#c13a34" },
-  released: { word: "Released", sub: "seller paid", color: "#1f7f58" },
-  refunded: { word: "Returned", sub: "buyer not charged", color: "#18203a" },
-  split: { word: "Split", sub: "settled fairly", color: "#1f7f58" },
+const SEAL: Record<DealStatus, { state: SealState; word: string; sub: string; color: string }> = {
+  draft: { state: "empty", word: "Not sealed yet", sub: "Both people need to agree to the terms.", color: "text-slate" },
+  agreed: { state: "empty", word: "Ready to seal", sub: "The seal goes on when the buyer pays.", color: "text-ink" },
+  funded: { state: "pressed", word: "Sealed", sub: "The money is on hold. Nobody can touch it.", color: "text-wax" },
+  disputed: { state: "pressed", word: "Sealed, under review", sub: "The money stays on hold while the mediator looks.", color: "text-risk" },
+  released: { state: "cracked", word: "Seal broken, seller paid", sub: "The proof checked out.", color: "text-safe" },
+  refunded: { state: "lifted", word: "Seal lifted, buyer refunded", sub: "The buyer was never charged.", color: "text-ink" },
+  split: { state: "cracked", word: "Seal broken, split fairly", sub: "Part to the seller, the rest back to the buyer.", color: "text-safe" },
 };
 
-/** The circular stamp. Re-mounts (and re-stamps) whenever the status changes. */
 export function Seal({ status, size = 132 }: { status: DealStatus; size?: number }) {
   const s = SEAL[status];
-  return (
-    <div key={status} className="seal seal-animate" aria-label={`Deal status: ${s.word}, ${s.sub}`} role="img">
-      <svg width={size} height={size} viewBox="0 0 140 140">
-        <defs>
-          <path id={`arc-${status}`} d="M70,70 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0" />
-        </defs>
-        <circle cx="70" cy="70" r="66" fill="none" stroke={s.color} strokeWidth="3" />
-        <circle cx="70" cy="70" r="58" fill="none" stroke={s.color} strokeWidth="1.2" strokeDasharray="2 3" />
-        <text fill={s.color} fontSize="10.5" fontWeight="600" letterSpacing="2.4" fontFamily="Instrument Sans, sans-serif">
-          <textPath href={`#arc-${status}`} startOffset="2%">
-            {`sealed · ${s.sub} · sealed · ${s.sub} ·`}
-          </textPath>
-        </text>
-        <text
-          x="70"
-          y="77"
-          textAnchor="middle"
-          fill={s.color}
-          fontSize={s.word.length > 7 ? 19 : 23}
-          fontWeight="800"
-          fontFamily="Bricolage Grotesque, sans-serif"
-        >
-          {s.word}
-        </text>
-      </svg>
-    </div>
-  );
+  return <WaxSeal state={s.state} size={size} label={`${s.word}. ${s.sub}`} />;
 }
 
 const delivery: Record<DealTerms["deliveryMethod"], string> = {
@@ -67,18 +41,14 @@ export function Ticket({
   sellerName: string;
   footer?: React.ReactNode;
 }) {
+  const seal = status ? SEAL[status] : null;
   return (
-    <article className="ticket overflow-visible">
-      <div className="relative p-6 sm:p-7">
-        {status && (
-          <div className="pointer-events-none absolute -top-6 right-3 sm:right-6">
-            <Seal status={status} size={112} />
-          </div>
-        )}
+    <article className="letter">
+      <div className="p-6 pb-8 sm:p-8 sm:pb-9">
         <p className="text-sm text-slate">
-          {sellerName} sells to {buyerName}
+          A deal between {sellerName} and {buyerName}
         </p>
-        <h2 className={`display mt-1 max-w-[16ch] text-[2rem] font-bold leading-[1.05] sm:text-4xl ${status ? "pr-24 sm:pr-28" : ""}`}>{terms.title}</h2>
+        <h2 className="display mt-1.5 max-w-[18ch] text-[2rem] font-bold leading-[1.05] sm:text-4xl">{terms.title}</h2>
         <p className="display mt-4 text-5xl font-extrabold tracking-tight">{money(terms.price, terms.currency)}</p>
         {terms.description && <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-slate">{terms.description}</p>}
         <dl className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 text-[15px] sm:grid-cols-3">
@@ -95,9 +65,26 @@ export function Ticket({
             <dd className="font-medium">{terms.deadline}</dd>
           </div>
         </dl>
+        {seal && (
+          <p className="mt-6 pr-28 sm:pr-40" aria-live="polite">
+            <span className={`display block text-xl font-bold ${seal.color}`}>{seal.word}</span>
+            <span className="text-sm text-slate">{seal.sub}</span>
+          </p>
+        )}
       </div>
-      <div className="ticket-perf" />
-      <div className="p-6 sm:p-7">
+      <div className="letter-fold relative">
+        {status && (
+          <div className="pointer-events-none absolute right-2 top-1/2 z-10 -translate-y-1/2 sm:right-6">
+            <div className="sm:hidden">
+              <Seal status={status} size={112} />
+            </div>
+            <div className="hidden sm:block">
+              <Seal status={status} size={150} />
+            </div>
+          </div>
+        )}
+      </div>
+      <div className={`p-6 pt-7 sm:p-8 sm:pt-8 ${status ? "pr-28 sm:pr-44" : ""}`}>
         <h3 className="font-semibold">The seller gets paid when they show</h3>
         <ul className="mt-3 space-y-2">
           {terms.proofRequired.map((p) => (

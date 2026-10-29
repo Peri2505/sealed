@@ -44,7 +44,7 @@ export function DealActions(props: Props) {
 }
 
 function Panel({ title, children, tone }: { title: string; children: React.ReactNode; tone?: "hold" | "risk" | "safe" }) {
-  const border = tone === "hold" ? "border-hold/50" : tone === "risk" ? "border-risk/40" : tone === "safe" ? "border-safe/40" : "border-line";
+  const border = tone === "hold" ? "border-wax/40" : tone === "risk" ? "border-risk/40" : tone === "safe" ? "border-safe/40" : "border-line";
   return (
     <section className={`rounded-2xl border bg-card p-5 sm:p-6 ${border}`}>
       <h2 className="display text-2xl font-bold">{title}</h2>
@@ -382,7 +382,7 @@ export function Timeline({ events }: { events: DealEvent[] }) {
         <li key={i} className="relative">
           <span
             className={`absolute -left-[30.5px] top-1.5 h-3 w-3 rounded-full border-2 border-paper ${
-              e.actor === "paypal" ? "bg-hold" : e.actor === "ai" ? "bg-ink" : "bg-slate/60"
+              e.actor === "paypal" ? "bg-wax" : e.actor === "ai" ? "bg-ink" : "bg-slate/60"
             }`}
           />
           <p className="text-xs text-slate">

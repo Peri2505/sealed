@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { SealMark } from "@/components/WaxSeal";
 
 export const metadata: Metadata = {
   title: "Sealed: safe deals between strangers",
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <Mark />
+            <SealMark size={32} />
             <span className="display text-xl font-bold">Sealed</span>
           </Link>
           <Link href="/#how" className="text-sm text-slate hover:text-ink">
@@ -39,12 +40,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 
-function Mark() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-      <circle cx="16" cy="16" r="14.5" fill="none" stroke="#18203a" strokeWidth="2" />
-      <circle cx="16" cy="16" r="11" fill="none" stroke="#18203a" strokeWidth="1.2" strokeDasharray="1.6 1.8" />
-      <path d="M10.5 16.5l3.8 3.7 7.4-8" fill="none" stroke="#d98e1f" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
