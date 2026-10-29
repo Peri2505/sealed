@@ -357,9 +357,11 @@ function Outcome({ deal, role }: { deal: PublicDeal; role: Role }) {
         </>
       ) : (
         <p className="text-[15px] leading-relaxed text-slate">
-          {deal.status === "released"
-            ? "The proof covered every term, so the hold was turned into a payment. Nobody had to trust anybody."
-            : "The money never left the buyer's account."}
+          {deal.status !== "released"
+            ? "The money never left the buyer's account."
+            : deal.proof?.verification?.verdict === "pass"
+              ? "The proof covered every term, so the hold was turned into a payment. Nobody had to trust anybody."
+              : `${deal.buyerName} confirmed they received it, so the hold was turned into a payment.`}
         </p>
       )}
       {deal.proof?.verification && <VerificationCard v={deal.proof.verification} image={deal.proof.imageDataUrl} />}

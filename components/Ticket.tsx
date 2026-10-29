@@ -11,7 +11,7 @@ const SEAL: Record<DealStatus, { state: SealState; word: string; sub: string; co
   agreed: { state: "empty", word: "Ready to seal", sub: "The seal goes on when the buyer pays.", color: "text-ink" },
   funded: { state: "pressed", word: "Sealed", sub: "The money is on hold. Nobody can touch it.", color: "text-wax" },
   disputed: { state: "pressed", word: "Sealed, under review", sub: "The money stays on hold while the mediator looks.", color: "text-risk" },
-  released: { state: "cracked", word: "Seal broken, seller paid", sub: "The proof checked out.", color: "text-safe" },
+  released: { state: "cracked", word: "Seal broken, seller paid", sub: "The money was released to the seller.", color: "text-safe" },
   refunded: { state: "lifted", word: "Seal lifted, buyer refunded", sub: "The buyer was never charged.", color: "text-ink" },
   split: { state: "cracked", word: "Seal broken, split fairly", sub: "Part to the seller, the rest back to the buyer.", color: "text-safe" },
 };
