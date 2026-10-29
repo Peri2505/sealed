@@ -75,7 +75,7 @@ Both views refresh every few seconds, so you can also open them in two browser w
 
 ## Deploy (Render)
 
-This repo includes `render.yaml`. On [Render](https://render.com): **New → Blueprint**, pick the repo, then fill in the environment variables. Set `APP_URL` to your Render URL. The blueprint attaches a small persistent disk for deal data.
+This repo includes `render.yaml`. On [Render](https://render.com): **New → Blueprint**, pick the repo, then fill in the environment variables. Set `APP_URL` to your Render URL. It uses the free plan, where the server sleeps when idle and demo deals reset on restart; see the comments in `render.yaml` to add a persistent disk on a paid plan.
 
 ---
 
