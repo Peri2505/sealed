@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f3f5fa;
+  --color-card: #ffffff;
+  --color-ink: #18203a;
+  --color-slate: #5d6683;
+  --color-line: #d9deea;
+  --color-hold: #d98e1f;
+  --color-hold-soft: #fdf3e2;
+  --color-safe: #1f7f58;
+  --color-safe-soft: #e4f4ec;
+  --color-risk: #c13a34;
+  --color-risk-soft: #fbe9e8;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+}
+
+/* The ticket: a deal printed on a perforated stub */
+.ticket {
+  position: relative;
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+}
+.ticket-perf {
+  position: relative;
+  border-top: 2px dashed var(--color-line);
+}
+.ticket-perf::before,
+.ticket-perf::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+}
+.ticket-perf::before {
+  left: -12px;
+  clip-path: inset(0 0 0 50%);
+}
+.ticket-perf::after {
+  right: -12px;
+  clip-path: inset(0 50% 0 0);
+}
+
+/* The seal: the one animated moment, played when money changes state */
+@keyframes stamp {
+  0% {
+    transform: scale(1.9) rotate(-28deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(0.92) rotate(-9deg);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1.04) rotate(-11deg);
+  }
+  100% {
+    transform: scale(1) rotate(-10deg);
+  }
+}
+.seal {
+  transform: rotate(-10deg);
+}
+.seal-animate {
+  animation: stamp 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+@keyframes flag-in {
+  from {
+    background-color: transparent;
+  }
+}
+mark.flag {
+  background: var(--color-risk-soft);
+  color: inherit;
+  border-bottom: 2px solid var(--color-risk);
+  padding: 0 2px;
+  border-radius: 3px;
+  animation: flag-in 900ms ease-out both;
+}
+mark.flag.medium {
+  background: var(--color-hold-soft);
+  border-color: var(--color-hold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seal-animate,
+  mark.flag {
+    animation: none;
+  }
+}
