@@ -4,7 +4,7 @@ import { randomUUID } from "crypto";
 /**
  * PayPal REST integration (sandbox).
  *
- * Handshake uses the authorize-then-capture pattern of Orders v2 as a
+ * Sealed uses the authorize-then-capture pattern of Orders v2 as a
  * payment hold:
  *   1. createOrder (intent=AUTHORIZE)   buyer approves in PayPal Checkout
  *   2. authorizeOrder                   money is reserved on the buyer's account
@@ -92,7 +92,7 @@ export async function createOrder(opts: {
       payment_source: {
         paypal: {
           experience_context: {
-            brand_name: "Handshake",
+            brand_name: "Sealed",
             shipping_preference: "NO_SHIPPING",
             user_action: "CONTINUE",
           },
@@ -160,8 +160,8 @@ export async function captureAuthorization(opts: {
     {
       amount: { currency_code: opts.currency, value: opts.amount },
       final_capture: true, // anything not captured goes back to the buyer
-      invoice_id: `handshake-${opts.dealId}`,
-      note_to_payer: "Released by Handshake after delivery was verified.",
+      invoice_id: `sealed-${opts.dealId}`,
+      note_to_payer: "Released by Sealed after delivery was verified.",
     },
     `capture-${opts.dealId}`,
   );
@@ -193,8 +193,8 @@ export async function createPayout(opts: { dealId: string; email: string; amount
     "/v1/payments/payouts",
     {
       sender_batch_header: {
-        sender_batch_id: `handshake-${opts.dealId}`,
-        email_subject: "You've been paid through Handshake",
+        sender_batch_id: `sealed-${opts.dealId}`,
+        email_subject: "You've been paid through Sealed",
       },
       items: [
         {

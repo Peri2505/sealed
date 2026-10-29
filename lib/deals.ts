@@ -130,7 +130,7 @@ export async function startCheckout(id: string, role: Role) {
       dealId: deal.id,
       amount: deal.terms.price,
       currency: deal.terms.currency,
-      description: `Handshake hold: ${deal.terms.title}`,
+      description: `Sealed hold: ${deal.terms.title}`,
     });
     deal.paypal.orderId = order.id;
     await saveDeal(deal);
@@ -303,11 +303,11 @@ async function settle(deal: Deal, sellerPercent: number, message: string) {
         email: deal.sellerPaypalEmail,
         amount,
         currency: deal.terms.currency,
-        note: `Payment for "${deal.terms.title}" through Handshake.`,
+        note: `Payment for "${deal.terms.title}" through Sealed.`,
       });
       addEvent(deal, "paypal", "payout_sent", `Payout sent to ${deal.sellerPaypalEmail}.`);
     } catch (e) {
-      addEvent(deal, "system", "payout_failed", `Payout to the seller failed: ${(e as Error).message}. The captured funds are safe in the Handshake account.`);
+      addEvent(deal, "system", "payout_failed", `Payout to the seller failed: ${(e as Error).message}. The captured funds are safe in the Sealed account.`);
     }
   }
   addEvent(deal, "system", "settled", message);

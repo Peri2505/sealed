@@ -18,7 +18,7 @@ const RULES: { re: RegExp; category: string; explanation: string; severity: Seve
   { re: /https?:\/\/(?!www\.paypal\.com)\S+/i, category: "Phishing link", explanation: "Links to 'shipping' or 'payment' pages are often fake login pages.", severity: "medium" },
   { re: /verification code|verify (your|my) (account|number)|send me the code/i, category: "Account takeover", explanation: "Nobody needs your verification code to buy or sell. This is how accounts get stolen.", severity: "high" },
   { re: /can'?t meet|out of (town|the country)|deployed|my (cousin|agent|shipper) will/i, category: "Identity mismatch", explanation: "A seller who can't meet and has a 'shipper' or 'agent' often has no item at all.", severity: "medium" },
-  { re: /ignore (all|previous)|approve this|you are (now|an ai)|system prompt/i, category: "Prompt injection", explanation: "This text tries to give orders to an AI. Handshake ignores it and flags it.", severity: "high" },
+  { re: /ignore (all|previous)|approve this|you are (now|an ai)|system prompt/i, category: "Prompt injection", explanation: "This text tries to give orders to an AI. Sealed ignores it and flags it.", severity: "high" },
 ];
 
 const SAFE = [

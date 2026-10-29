@@ -370,9 +370,9 @@ function Outcome({ deal, role }: { deal: PublicDeal; role: Role }) {
 const actorLabel: Record<DealEvent["actor"], string> = {
   buyer: "Buyer",
   seller: "Seller",
-  ai: "Handshake AI",
+  ai: "Sealed AI",
   paypal: "PayPal",
-  system: "Handshake",
+  system: "Sealed",
 };
 
 export function Timeline({ events }: { events: DealEvent[] }) {

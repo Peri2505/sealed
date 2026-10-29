@@ -1,5 +1,5 @@
 {
-  "name": "handshake",
+  "name": "sealed",
   "version": "1.0.0",
   "private": true,
   "description": "AI-verified deals between strangers, powered by PayPal payment holds.",

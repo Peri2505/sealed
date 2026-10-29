@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: handshake
+    name: sealed
     runtime: node
     plan: starter
     buildCommand: npm ci && npm run build
@@ -23,6 +23,6 @@ services:
       - key: APP_URL
         sync: false
     disk:
-      name: handshake-data
+      name: sealed-data
       mountPath: /var/data
       sizeGB: 1

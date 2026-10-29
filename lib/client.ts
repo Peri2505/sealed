@@ -38,7 +38,7 @@ export const money = (value: string, currency = "USD") => {
 };
 
 /** Links for deals created on this device, so one person can demo both sides. */
-const KEY = "handshake.links";
+const KEY = "sealed.links";
 export function rememberLinks(id: string, links: { buyer: string; seller: string }) {
   try {
     const all = JSON.parse(localStorage.getItem(KEY) || "{}");

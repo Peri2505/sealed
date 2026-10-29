@@ -79,10 +79,10 @@ export default function Home() {
       <section className="grid gap-10 pt-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-12">
         <div>
           <h1 className="display text-[2.6rem] font-extrabold leading-[0.98] sm:text-6xl">
-            Paying a stranger? Shake on it first.
+            Paying a stranger? Get it sealed first.
           </h1>
           <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-slate">
-            Paste your chat with a buyer or seller. Handshake points out scam warning signs, writes down what you agreed,
+            Paste your chat with a buyer or seller. Sealed points out scam warning signs, writes down what you agreed,
             and keeps the money on hold with PayPal until the seller proves they delivered.
           </p>
           {config && (config.aiSimulated || config.paypalSimulated) && (
@@ -248,7 +248,7 @@ function HowItWorks() {
   ];
   return (
     <section id="how" className="mt-24 scroll-mt-6">
-      <h2 className="display text-3xl font-bold sm:text-4xl">How a Handshake works</h2>
+      <h2 className="display text-3xl font-bold sm:text-4xl">How Sealed works</h2>
       <ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
         {steps.map(([title, body], i) => (
           <li key={title} className="border-t-2 border-ink pt-4">

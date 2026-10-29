@@ -28,7 +28,7 @@ export function Seal({ status, size = 132 }: { status: DealStatus; size?: number
         <circle cx="70" cy="70" r="58" fill="none" stroke={s.color} strokeWidth="1.2" strokeDasharray="2 3" />
         <text fill={s.color} fontSize="10.5" fontWeight="600" letterSpacing="2.4" fontFamily="Instrument Sans, sans-serif">
           <textPath href={`#arc-${status}`} startOffset="2%">
-            {`handshake · ${s.sub} · handshake · ${s.sub} ·`}
+            {`sealed · ${s.sub} · sealed · ${s.sub} ·`}
           </textPath>
         </text>
         <text

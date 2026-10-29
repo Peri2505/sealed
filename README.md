@@ -1,8 +1,10 @@
-# Handshake 🤝
+# Sealed
+
+*Your deal, sealed.*
 
 **AI-verified deals between strangers, with payment held by PayPal until delivery is proven.**
 
-Paste any marketplace chat. Handshake's AI spots scam red flags, turns the conversation into clear written terms, and puts the buyer's money **on hold** with PayPal (Orders v2 `intent=AUTHORIZE`). The money is only captured for the seller when an AI vision check confirms their proof matches every term. If it doesn't, the hold is voided, or an AI mediator recommends a fair split.
+Paste any marketplace chat. Sealed's AI spots scam red flags, turns the conversation into clear written terms, and puts the buyer's money **on hold** with PayPal (Orders v2 `intent=AUTHORIZE`). The money is only captured for the seller when an AI vision check confirms their proof matches every term. If it doesn't, the hold is voided, or an AI mediator recommends a fair split.
 
 Built for the **PayPal AI Hackathon 2026**.
 
@@ -12,7 +14,7 @@ Built for the **PayPal AI Hackathon 2026**.
 
 Buying a used console on a marketplace, paying a freelancer you met on Discord, renting a sublet from a forum post: someone has to go first, and scammers exploit exactly that. Most of these deals happen in chat apps with no buyer *or* seller protection, so people end up paying with gift cards, Zelle, or "friends and family" and lose the money.
 
-## What Handshake does
+## What Sealed does
 
 | Step | What happens | PayPal | AI |
 |---|---|---|---|
@@ -37,8 +39,8 @@ Buying a used console on a marketplace, paying a freelancer you met on Discord, 
 **Requirements:** Node.js 20+
 
 ```bash
-git clone https://github.com/Peri2505/handshake.git
-cd handshake
+git clone https://github.com/Peri2505/sealed.git
+cd sealed
 npm install
 cp .env.example .env.local   # then fill in the keys below
 npm run dev
@@ -112,8 +114,8 @@ components/                Ticket + seal, risk report, PayPal button, deal actio
 
 ## Limitations and next steps
 
-- PayPal authorizations have a 3-day honor period and expire after 29 days. Handshake shows the expiry; reauthorization for long deadlines is next.
-- Handshake places a **payment hold**. It is not a licensed escrow service. A production version would run under PayPal's marketplace (Commerce Platform) model so the seller is the merchant of record.
+- PayPal authorizations have a 3-day honor period and expire after 29 days. Sealed shows the expiry; reauthorization for long deadlines is next.
+- Sealed places a **payment hold**. It is not a licensed escrow service. A production version would run under PayPal's marketplace (Commerce Platform) model so the seller is the merchant of record.
 - Tracking numbers are checked for presence, not looked up with the carrier yet. PayPal's Add Tracking API is a natural next step.
 
 ## License

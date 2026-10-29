@@ -35,7 +35,7 @@ export async function POST(req: Request) {
   if (!msg) return NextResponse.json({ ignored: evt.event_type });
 
   const r = evt.resource ?? {};
-  const dealId = r.custom_id || r.invoice_id?.replace(/^handshake-/, "") || null;
+  const dealId = r.custom_id || r.invoice_id?.replace(/^sealed-/, "") || null;
   const authorizationId = r.supplementary_data?.related_ids?.authorization_id || (evt.event_type.startsWith("PAYMENT.AUTHORIZATION") ? r.id : null);
   const found = await findDealByOrderOrAuth({ dealId, authorizationId });
   if (!found) return NextResponse.json({ ignored: "no matching deal" });
