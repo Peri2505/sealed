@@ -95,7 +95,7 @@ export default function Home() {
         </div>
 
         <div className="letter relative p-5 sm:p-6">
-          <div className="pointer-events-none absolute -right-5 -top-14 hidden sm:block lg:-right-10">
+          <div className="pointer-events-none absolute -right-4 -top-14 hidden sm:block">
             <WaxSeal state="pressed" size={128} label="Sealed" />
           </div>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:pr-24">
