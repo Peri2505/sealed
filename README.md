@@ -4,7 +4,7 @@
 
 Buying something from a stranger online is a little scary. Someone has to send money first, and scammers count on that moment. Sealed makes it safe: paste your chat, and Sealed spots the warning signs, writes down what you both agreed to, and holds the payment with PayPal until the seller proves they delivered.
 
-**[Try the live demo](https://sealed-1twu.onrender.com)** · **Demo video:** _YouTube link coming soon_ · Built for the **PayPal AI Hackathon 2026**
+**[Try the live demo](https://sealed-1twu.onrender.com)** · **[Watch the demo video](https://www.youtube.com/watch?v=zhCV40iyJpQ)** (2 min) · Built for the **PayPal AI Hackathon 2026**
 
 ![Sealed flags a scam chat, then rejects fake proof and keeps the money on hold](docs/banner.jpg)
 
