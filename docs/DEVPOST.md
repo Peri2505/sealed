@@ -24,7 +24,7 @@ Sealed turns any chat into a protected deal in five steps:
 Sealed is built on PayPal, not against it. Goods & Services protects buyers *after* something goes wrong, through a dispute. Sealed works *before* money moves: both people agree in writing on exactly what proof releases the payment, the seller sees the money is reserved before shipping, and the proof is checked in seconds. It protects sellers too, warns about scams before anyone pays, and can settle with a fair partial split instead of win-or-lose.
 
 ## How we built it
-- **PayPal:** JS SDK buttons; Orders v2 create + authorize; Payments v2 capture, partial capture with `final_capture`, void, and refund; Payouts to forward the seller's share; verified Webhooks to keep the timeline in sync. Every money call uses `PayPal-Request-Id` for idempotency.
+- **PayPal:** JS SDK buttons; Orders v2 create + authorize; Payments v2 capture, partial capture with `final_capture`, and void. Every money call uses `PayPal-Request-Id` for idempotency. Refunds, Payouts (to forward the seller's share) and signature-verified Webhooks are built in and switched off in the live demo.
 - **AI:** Anthropic Claude with Zod-typed structured outputs and image input for three jobs: chat risk analysis + term extraction, proof verification, and mediation.
 - **App:** Next.js 16, React 19, TypeScript, Tailwind 4. Deployed on Render.
 - **Hardening:** rate limits on every AI endpoint (per client and a global daily cap), and `npm test`, which runs 18 end-to-end checks across release, refund, split, prompt injection and access control.
