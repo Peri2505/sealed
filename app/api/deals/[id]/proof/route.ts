@@ -1,4 +1,5 @@
 import { submitProof } from "@/lib/deals";
+import { limitAiCall } from "@/lib/ratelimit";
 import { type Ctx, fail, pub, readBody, viewer } from "@/lib/http";
 
 export const maxDuration = 60;
@@ -6,6 +7,7 @@ export const maxDuration = 60;
 export async function POST(req: Request, ctx: Ctx) {
   try {
     const { id, role } = await viewer(req, ctx);
+    limitAiCall(req);
     const b = await readBody<{ imageDataUrl?: string | null; note?: string; tracking?: string }>(req);
     const deal = await submitProof(id, role, {
       imageDataUrl: b.imageDataUrl || null,
