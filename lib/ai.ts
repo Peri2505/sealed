@@ -53,7 +53,7 @@ const AnalysisSchema = z.object({
     deadline: z.string().describe("When delivery must happen, e.g. 'Within 5 days of payment'"),
     proofRequired: z
       .array(z.string())
-      .describe("2-3 pieces of evidence the seller can show at hand-off or shipping time; never delivery confirmation"),
+      .describe("1-2 pieces of evidence: one photo of the item and, if shipped, a tracking number; never delivery confirmation"),
   }),
   buyerName: z.string().nullable(),
   sellerName: z.string().nullable(),
@@ -105,8 +105,8 @@ ${chat.slice(0, 12000)}
 3. Turn what they agreed into clear deal terms.
 
 Rules for the proof requirements (the seller gets paid as soon as they show these):
-- 2 or 3 items, each checkable from ONE moment: when the seller hands the item off or ships it.
-- Use only: a clear photo of the actual item, a photo of it packed with the shipping label, a tracking number, or a link for digital work.
+- The seller submits exactly ONE photo, plus an optional tracking number and a short note. Every requirement must be satisfiable with that.
+- So use 1 or 2 items: one clear photo of the actual item (showing its condition), plus a tracking number when it ships. For in-person deals, just the photo. For digital work or services, a link or screenshot of the finished work.
 - Never ask for delivery confirmation, the buyer receiving it, or anything that only happens after shipping. The buyer can always report a problem later.
 - Don't ask for handwritten notes, serial numbers or receipts unless the people in the chat mentioned them.`,
   });
