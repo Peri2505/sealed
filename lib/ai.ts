@@ -53,7 +53,7 @@ const AnalysisSchema = z.object({
     deadline: z.string().describe("When delivery must happen, e.g. 'Within 5 days of payment'"),
     proofRequired: z
       .array(z.string())
-      .describe("2-4 concrete, checkable pieces of evidence the seller must provide to get paid"),
+      .describe("2-3 pieces of evidence the seller can show at hand-off or shipping time; never delivery confirmation"),
   }),
   buyerName: z.string().nullable(),
   sellerName: z.string().nullable(),
@@ -102,7 +102,13 @@ ${chat.slice(0, 12000)}
 
 1. Find scam red flags. Quote the exact words. Common patterns: moving off-platform, paying with gift cards / crypto / wire / "friends and family", urgency or guilt, prices far below market, overpayment and refund requests, fake shipping or "verification" links, identity that doesn't add up, refusing to meet or show the item.
 2. Score the overall risk honestly. A normal friendly deal should score low.
-3. Turn what they agreed into clear deal terms. Proof requirements must be things a photo, tracking number, or link can show.`,
+3. Turn what they agreed into clear deal terms.
+
+Rules for the proof requirements (the seller gets paid as soon as they show these):
+- 2 or 3 items, each checkable from ONE moment: when the seller hands the item off or ships it.
+- Use only: a clear photo of the actual item, a photo of it packed with the shipping label, a tracking number, or a link for digital work.
+- Never ask for delivery confirmation, the buyer receiving it, or anything that only happens after shipping. The buyer can always report a problem later.
+- Don't ask for handwritten notes, serial numbers or receipts unless the people in the chat mentioned them.`,
   });
   return ask(
     AnalysisSchema,
