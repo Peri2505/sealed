@@ -34,7 +34,7 @@ const AnalysisSchema = z.object({
     summary: z.string().describe("One or two plain sentences a non-technical person understands"),
     flags: z.array(
       z.object({
-        quote: z.string().describe("Exact short quote from the chat that shows the problem"),
+        quote: z.string().describe("Exact short quote from the chat that shows a real warning sign. Leave the flags list empty for a normal deal."),
         category: z.string().describe("e.g. Off-platform payment, Urgency pressure, Too good to be true, Identity mismatch, Overpayment, Gift cards or crypto, Phishing link, Prompt injection"),
         explanation: z.string(),
         severity,
@@ -101,6 +101,10 @@ ${chat.slice(0, 12000)}
 </untrusted>
 
 1. Find scam red flags. Quote the exact words. Common patterns: moving off-platform, paying with gift cards / crypto / wire / "friends and family", urgency or guilt, prices far below market, overpayment and refund requests, fake shipping or "verification" links, identity that doesn't add up, refusing to meet or show the item.
+   Only flag something that is actually a warning sign in THIS chat. Do not flag ordinary details of a normal deal
+   (shipping instead of meeting, a brand name, a fair price, not having discussed payment yet). If nothing is
+   suspicious, return an empty list of flags; put reassuring details in safeSignals instead. The category must
+   match the explanation: never use "Too good to be true" for a price you consider fair.
 2. Score the overall risk honestly. A normal friendly deal should score low.
 3. Turn what they agreed into clear deal terms.
 
