@@ -75,6 +75,15 @@ async function run() {
   const again = await call(`/api/deals/${d0.id}/confirm`, { body: {}, token: d0.buyer });
   ok(again.status === 409, "money cannot be released twice");
 
+  console.log("Two proof photos");
+  const dp = await fundedDeal(a.body.terms, a.body.risk);
+  const two = await call(`/api/deals/${dp.id}/proof`, { body: { imageDataUrls: [PHOTO, PHOTO], note: "Item, then packed in its box", tracking: "9400" }, token: dp.seller });
+  ok(two.body.deal?.status === "released", "two photos are accepted and the money is released");
+  ok(two.body.deal?.proof?.images?.length === 2, "both photos are stored with the proof");
+  const three = await fundedDeal(a.body.terms, a.body.risk);
+  const tooMany = await call(`/api/deals/${three.id}/proof`, { body: { imageDataUrls: [PHOTO, PHOTO, PHOTO] }, token: three.seller });
+  ok(tooMany.status === 400, "more than two photos is rejected");
+
   console.log("Wrong item: mediator refunds the buyer");
   const d1 = await fundedDeal(a.body.terms, a.body.risk);
   await call(`/api/deals/${d1.id}/proof`, { body: { note: "It's a different model, sorry", tracking: "1" }, token: d1.seller });

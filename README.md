@@ -62,7 +62,7 @@ I'm studying cybersecurity, so this part mattered to me the most.
 - **No double payments.** Every PayPal call that moves money carries an idempotency key, and each deal is locked while it's being settled, so a double-click can't capture twice.
 - **The server double-checks PayPal.** Before a deal counts as paid, the server confirms the amount and deal ID with PayPal.
 - **Nobody can run up the AI bill.** The AI endpoints are rate limited (6 requests a minute and 40 an hour per visitor) with a daily cap overall.
-- **It's tested.** `npm test` runs 18 checks across every path: release, refund, partial split, prompt injection, double-release attempts and access control.
+- **It's tested.** `npm test` runs 21 checks across every path: release, refund, partial split, prompt injection, double-release attempts and access control.
 
 ## Run it on your computer
 

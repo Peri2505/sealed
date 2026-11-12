@@ -81,7 +81,10 @@ export interface Deal {
     simulated: boolean;
   };
   proof: {
+    /** First photo, kept for older deals and simple displays. */
     imageDataUrl: string | null;
+    /** All photos, in order: usually the item, then the item packed in its box. */
+    images?: string[];
     note: string;
     tracking: string;
     submittedAt: string;

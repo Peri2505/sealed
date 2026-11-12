@@ -97,10 +97,10 @@ function guessItem(chat: string) {
 
 const BAD = /wrong|different|broken|damaged|crack|missing|fake|replica|not the|scratched/i;
 
-export function verifyProof(deal: Deal, proof: { imageDataUrl: string | null; note: string; tracking: string }): Verification {
+export function verifyProof(deal: Deal, proof: { images: string[]; note: string; tracking: string }): Verification {
   const injection = RULES.find((r) => r.category === "Prompt injection")!.re.test(proof.note);
   const bad = BAD.test(proof.note);
-  const hasPhoto = Boolean(proof.imageDataUrl);
+  const hasPhoto = proof.images.length > 0;
   const checks = deal.terms.proofRequired.map((req) => ({
     requirement: req,
     met: (bad ? "no" : hasPhoto ? "yes" : "unclear") as "yes" | "no" | "unclear",

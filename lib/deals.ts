@@ -158,17 +158,21 @@ export async function completeCheckout(id: string, role: Role, orderId: string) 
   });
 }
 
-export async function submitProof(id: string, role: Role, proof: { imageDataUrl: string | null; note: string; tracking: string }) {
+export const MAX_PROOF_PHOTOS = 2;
+
+export async function submitProof(id: string, role: Role, proof: { images: string[]; note: string; tracking: string }) {
   // Run the AI outside the lock (slow), then re-check state inside it.
   const before = (await getDeal(id))!;
   need(role === "seller", "Only the seller submits proof.", 403);
   need(before.status === "funded", "Proof can be added once the buyer's payment is on hold.");
-  need(proof.imageDataUrl || proof.tracking || proof.note, "Add a photo, a tracking number, or a note.", 400);
-  if (proof.imageDataUrl) {
-    need(ai.parseDataUrl(proof.imageDataUrl), "Upload a JPG, PNG, WebP, or GIF image.", 400);
-    need(proof.imageDataUrl.length < 4_500_000, "That image is too large. Try one under 3 MB.", 413);
+  const images = proof.images.filter(Boolean);
+  need(images.length || proof.tracking || proof.note, "Add a photo, a tracking number, or a note.", 400);
+  need(images.length <= MAX_PROOF_PHOTOS, `Add up to ${MAX_PROOF_PHOTOS} photos.`, 400);
+  for (const img of images) {
+    need(ai.parseDataUrl(img), "Upload JPG, PNG, WebP, or GIF images.", 400);
+    need(img.length < 4_500_000, "One of the photos is too large. Try photos under 3 MB.", 413);
   }
-  const clean = { imageDataUrl: proof.imageDataUrl, note: proof.note.slice(0, 1000), tracking: proof.tracking.slice(0, 60) };
+  const clean = { imageDataUrl: images[0] ?? null, images, note: proof.note.slice(0, 1000), tracking: proof.tracking.slice(0, 60) };
   const verification = await ai.verifyProof(before, clean);
 
   return withDealLock(id, async () => {

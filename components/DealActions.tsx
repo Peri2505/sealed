@@ -130,7 +130,7 @@ function BuyerHoldStep({ deal, token, onChange }: Props) {
           ? `${deal.sellerName} sent proof, but it needs a closer look before the money moves.`
           : `${deal.sellerName} can't receive it until they upload proof that matches the terms. If you already have the item and it's right, you can release it yourself.`}
       </p>
-      {v && <VerificationCard v={v} image={deal.proof?.imageDataUrl ?? null} />}
+      {v && <VerificationCard v={v} images={proofImages(deal)} />}
       <div className="mt-5 space-y-3">
         <ErrorNote>{error}</ErrorNote>
         <Button
@@ -163,13 +163,58 @@ function BuyerHoldStep({ deal, token, onChange }: Props) {
   );
 }
 
+const PHOTO_SLOTS = [
+  { label: "Photo 1: the item", hint: "Show it clearly, in good light." },
+  { label: "Photo 2: in its box or case", hint: "Optional, but it helps the check." },
+];
+
+function PhotoSlot({ label, hint, value, onPick }: { label: string; hint: string; value: string | null; onPick: (v: string | null) => void }) {
+  const [err, setErr] = useState("");
+  return (
+    <div className="min-w-0">
+      <span className="block text-sm font-medium">{label}</span>
+      <span className="mb-1.5 block text-xs text-slate">{hint}</span>
+      <label className="flex h-40 cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-line bg-paper text-sm text-slate hover:border-slate/60">
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="sr-only"
+          onChange={async (e) => {
+            setErr("");
+            const f = e.target.files?.[0];
+            if (!f) return;
+            try {
+              onPick(await fileToDataUrl(f));
+            } catch (error) {
+              setErr((error as Error).message);
+            }
+          }}
+        />
+        {value ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={value} alt={label} className="h-full w-full object-contain" />
+        ) : (
+          <span>Take or choose a photo</span>
+        )}
+      </label>
+      {value && (
+        <button type="button" onClick={() => onPick(null)} className="mt-1 text-xs text-slate underline underline-offset-2 hover:text-ink">
+          Remove
+        </button>
+      )}
+      {err && <p className="mt-1 text-sm text-risk">{err}</p>}
+    </div>
+  );
+}
+
 function ProofStep({ deal, token, onChange }: Props) {
   const { busy, error, run } = useAction(onChange);
-  const [image, setImage] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<(string | null)[]>([null, null]);
   const [note, setNote] = useState("");
   const [tracking, setTracking] = useState("");
-  const [imgError, setImgError] = useState("");
   const v = deal.proof?.verification;
+  const chosen = photos.filter((p): p is string => Boolean(p));
   return (
     <Panel title="Show your proof, get paid" tone="hold">
       <p className="text-[15px] leading-relaxed text-slate">
@@ -179,58 +224,47 @@ function ProofStep({ deal, token, onChange }: Props) {
       {v && (
         <div className="mt-4">
           <p className="text-sm font-semibold">Last check</p>
-          <VerificationCard v={v} image={deal.proof?.imageDataUrl ?? null} />
+          <VerificationCard v={v} images={proofImages(deal)} />
         </div>
       )}
       <div className="mt-5 space-y-4">
-        <div>
-          <span className="mb-1.5 block text-sm font-medium">Photo</span>
-          <label className="flex min-h-36 cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-line bg-paper text-sm text-slate hover:border-slate/60">
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="sr-only"
-              onChange={async (e) => {
-                setImgError("");
-                const f = e.target.files?.[0];
-                if (!f) return;
-                try {
-                  setImage(await fileToDataUrl(f));
-                } catch (err) {
-                  setImgError((err as Error).message);
-                }
-              }}
+        <div className="grid gap-4 sm:grid-cols-2">
+          {PHOTO_SLOTS.map((slot, i) => (
+            <PhotoSlot
+              key={slot.label}
+              {...slot}
+              value={photos[i]}
+              onPick={(val) => setPhotos((cur) => cur.map((p, j) => (j === i ? val : p)))}
             />
-            {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image} alt="Your proof photo" className="max-h-64 w-full object-contain" />
-            ) : (
-              <span>Take or choose a photo</span>
-            )}
-          </label>
-          {imgError && <p className="mt-1 text-sm text-risk">{imgError}</p>}
+          ))}
         </div>
         {deal.terms.deliveryMethod === "shipping" && (
           <Field label="Tracking number">
             <Input value={tracking} onChange={(e) => setTracking(e.target.value)} placeholder="9400 1000 0000 0000 0000 00" />
           </Field>
         )}
-        <Field label="Note for the buyer" hint="Optional. Mention anything the photo doesn't show.">
+        <Field label="Note for the buyer" hint="Optional. Mention anything the photos don't show.">
           <TextArea rows={2} value={note} onChange={(e) => setNote(e.target.value)} />
         </Field>
         <ErrorNote>{error}</ErrorNote>
         <Button
           className="w-full"
           busy={busy === "proof"}
-          disabled={!image && !tracking && !note}
-          onClick={() => run("proof", () => api(`/api/deals/${deal.id}/proof`, { body: { imageDataUrl: image, note, tracking }, token }))}
+          disabled={!chosen.length && !tracking && !note}
+          onClick={() => run("proof", () => api(`/api/deals/${deal.id}/proof`, { body: { imageDataUrls: chosen, note, tracking }, token }))}
         >
           {busy === "proof" ? "Checking your proof" : "Submit proof"}
         </Button>
       </div>
     </Panel>
   );
+}
+
+/** Every proof photo, including deals from before multi-photo proof. */
+function proofImages(deal: PublicDeal): string[] {
+  const p = deal.proof;
+  if (!p) return [];
+  return p.images?.length ? p.images : p.imageDataUrl ? [p.imageDataUrl] : [];
 }
 
 function DisputeStep({ deal, role, token, onChange }: Props) {
@@ -246,7 +280,7 @@ function DisputeStep({ deal, role, token, onChange }: Props) {
         {d.reason} Each of you can explain what happened. Then the mediator compares it with the terms and the proof, and settles the
         payment.
       </p>
-      {v && <VerificationCard v={v} image={deal.proof?.imageDataUrl ?? null} />}
+      {v && <VerificationCard v={v} images={proofImages(deal)} />}
       <div className="mt-5 space-y-4">
         {mine ? (
           <Quote who="You said" text={mine} />
@@ -290,17 +324,21 @@ function Quote({ who, text }: { who: string; text: string }) {
   );
 }
 
-export function VerificationCard({ v, image }: { v: Verification; image: string | null }) {
+export function VerificationCard({ v, images }: { v: Verification; images: string[] }) {
   const icon = { yes: "✓", no: "✕", unclear: "?" } as const;
   const color = { yes: "text-safe", no: "text-risk", unclear: "text-[#9a640f]" } as const;
   return (
     <div className="mt-4 rounded-xl border border-line bg-paper p-4">
-      <div className="flex gap-4">
-        {image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt="Seller's proof" className="h-20 w-20 shrink-0 rounded-lg object-cover" />
+      <div className="flex flex-wrap gap-4">
+        {images.length > 0 && (
+          <div className="flex shrink-0 gap-2">
+            {images.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={i} src={src} alt={`Seller's proof photo ${i + 1}`} className="h-20 w-20 rounded-lg object-cover" />
+            ))}
+          </div>
         )}
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1 basis-56">
           <p className="font-semibold">
             {v.verdict === "pass" ? "Proof matches the terms" : v.verdict === "fail" ? "Proof doesn't match the terms" : "Not enough proof yet"}
             <span className="ml-2 text-sm font-normal text-slate">{Math.round(v.confidence * 100)}% confident</span>
@@ -364,7 +402,7 @@ function Outcome({ deal, role }: { deal: PublicDeal; role: Role }) {
               : `${deal.buyerName} confirmed they received it, so the hold was turned into a payment.`}
         </p>
       )}
-      {deal.proof?.verification && <VerificationCard v={deal.proof.verification} image={deal.proof.imageDataUrl} />}
+      {deal.proof?.verification && <VerificationCard v={deal.proof.verification} images={proofImages(deal)} />}
     </Panel>
   );
 }
