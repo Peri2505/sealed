@@ -1,6 +1,6 @@
 # Devpost submission text
 
-**Video demo link:** https://www.youtube.com/watch?v=zhCV40iyJpQ
+**Video demo link:** https://www.youtube.com/watch?v=nMtxoYhqxGI
 **Try it out links:** https://sealed-1twu.onrender.com and https://github.com/Peri2505/sealed
 
 **Project name (60 chars max):** Sealed: AI-verified deals between strangers
