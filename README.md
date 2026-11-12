@@ -99,7 +99,7 @@ This builds the app, starts it in offline mode, and walks through every deal pat
 
 **Deploy**
 
-The repo includes a `render.yaml`, so on [Render](https://render.com) you can choose **New → Blueprint**, pick the repo and add your keys. It runs on the free plan; a small GitHub Action pings it every 10 minutes so it doesn't fall asleep.
+The repo includes a `render.yaml`, so on [Render](https://render.com) you can choose **New → Blueprint**, pick the repo and add your keys. It runs on the free plan; once it's up, the app pings itself every 10 minutes so it doesn't fall asleep.
 
 ## What it's built with
 
