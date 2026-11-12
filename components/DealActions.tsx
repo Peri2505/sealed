@@ -239,8 +239,8 @@ function ProofStep({ deal, token, onChange }: Props) {
           ))}
         </div>
         {deal.terms.deliveryMethod === "shipping" && (
-          <Field label="Tracking number">
-            <Input value={tracking} onChange={(e) => setTracking(e.target.value)} placeholder="9400 1000 0000 0000 0000 00" />
+          <Field label="Tracking number" hint="From any carrier: USPS, UPS, FedEx, DHL…">
+            <Input value={tracking} onChange={(e) => setTracking(e.target.value)} placeholder="Paste the tracking number from your shipping receipt" />
           </Field>
         )}
         <Field label="Note for the buyer" hint="Optional. Mention anything the photos don't show.">

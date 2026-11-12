@@ -170,7 +170,13 @@ Seller's note: ${proof.note || "none"}
 </untrusted>
 
 Check every proof requirement one by one against what you can actually see, in any of the photos. Be strict: the buyer can't
-see the item yet, so "probably" is not enough. The photos must show the same item. If a photo shows a different item, the wrong condition,
+see the item yet, so "probably" is not enough. The photos must show the same item.
+Judge each requirement only on what this kind of evidence can show:
+- A tracking number meets its requirement when it looks like a real carrier number (USPS, UPS, FedEx, DHL or similar).
+  Sealed can't look numbers up with carriers yet, so don't ask whether it is active, where it is going, or when it was
+  sent. Mark it "no" only if it looks like a placeholder or nonsense (e.g. 0000, 1234, repeating digits).
+- Don't demand things no photo can prove, such as whether a case is "original" or the exact purchase date.
+  If the photo shows what the requirement describes, mark it met. If a photo shows a different item, the wrong condition,
 or the requirement simply isn't visible, mark it. Use "unclear" when the evidence is missing rather than wrong.
 A pass needs every requirement met.`,
   });
